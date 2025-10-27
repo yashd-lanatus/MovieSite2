@@ -9,77 +9,79 @@ export const MoviesContext = createContext()
 function MoviesContextProvider({children}) {
   const [allMovies, setAllMovies] = useState(moviesList);
 
-  
-
-
   // console.log(searchMovie,'from contextttt');
 
 
-  // handle sorting 
+  // handle sorting
 
-  const handleAToZ = () => {
-    setAllMovies([...allMovies].sort((a, b) => a.title.localeCompare(b.title)))
-    
+  const [openBtn, setOpenBtn] = useState('');
+
+  const handleAToZ = (btn) => {
+    setOpenBtn(btn)
+    setAllMovies([...allMovies].sort((a, b) => a.title.localeCompare(b.title)));
     console.log("Sorted A-Z");
   };
-  const handleZToA = () => {
-    setAllMovies([...allMovies].sort((a, b) => b.title.localeCompare(a.title)))
+  const handleZToA = (btn) => {
+    setOpenBtn(btn);
+    setAllMovies([...allMovies].sort((a, b) => b.title.localeCompare(a.title)));
     console.log("Sorted Z-A");
   };
 
+  //   const handleAToZ = () => {
+  //     allMovies.sort((a, b) => a.title.localeCompare(b.title));
+  //     // console.log(moviesList.sort((a,b)=> a.title.localeCompare(b.title)));
+  //     // console.log(moviesList);
+  //     //   setAllMovies(allMovies);
+  //     setSortAToZ(allMovies);
+  //     console.log("Sorted A-Z");
+  //     // if (sortAToZ.length > 0){
+  //     //     setAllMovies(sortAToZ)
+  //     // }
+  //   };
 
+  //   const handleZToA = () => {
+  //     allMovies.sort((a, b) => b.title.localeCompare(a.title));
+  //     //   setAllMovies(allMovies);
+  //     setSortZToA(allMovies);
+  //     console.log("Sorted Z-A");
+  //     // if (sortZToA.length > 0){
+  //     //     setAllMovies(sortZToA)
+  //     // }
+  //   };
 
-
-//   const handleAToZ = () => {
-//     allMovies.sort((a, b) => a.title.localeCompare(b.title));
-//     // console.log(moviesList.sort((a,b)=> a.title.localeCompare(b.title)));
-//     // console.log(moviesList);
-//     //   setAllMovies(allMovies);
-//     setSortAToZ(allMovies);
-//     console.log("Sorted A-Z");
-//     // if (sortAToZ.length > 0){
-//     //     setAllMovies(sortAToZ)
-//     // }
-//   };
-
-//   const handleZToA = () => {
-//     allMovies.sort((a, b) => b.title.localeCompare(a.title));
-//     //   setAllMovies(allMovies);
-//     setSortZToA(allMovies);
-//     console.log("Sorted Z-A");
-//     // if (sortZToA.length > 0){
-//     //     setAllMovies(sortZToA)
-//     // }
-//   };
-
-
-
-const [searchMovie, setSearchMovie] = useState([]);
-
+  
   // handle search form navbar
 
+  const [searchMovie, setSearchMovie] = useState([]);
+  
   const handleSearch = (e) => {
     moviesList.map((movie) => {
-      movie?.title
-        .toLowerCase()
-        .split(" ")
-        .find((item) => item === e)
+      movie?.title.toLowerCase().includes(e)
         ? searchMovie.push(movie)
         : setSearchMovie([]);
     });
-    //   console.log(searchMovies)
-    //   setAllMovies(searchMovie)
-    //   console.log(e);
     if (e === "") {
-      // console.log('e is blank');
       setAllMovies(moviesList);
     } else {
       setAllMovies(searchMovie);
     }
+    if (searchMovie.length === 0) {
+      console.log("Not found");
+    }
   };
 
 
-  
+  // for edit movies
+
+  const updateMovies = (updatedMovies) => {
+    setAllMovies((prev) =>
+      prev.map((movie) =>
+        movie.id === updatedMovies.id ? { ...movie, ...updatedMovies } : movie
+      )
+    );
+  };
+
+
   return (
     <MoviesContext.Provider
       value={{
@@ -89,6 +91,8 @@ const [searchMovie, setSearchMovie] = useState([]);
         handleSearch,
         handleAToZ,
         handleZToA,
+        updateMovies,
+        openBtn,
       }}
     >
       {children}

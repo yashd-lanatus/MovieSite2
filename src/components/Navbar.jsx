@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Container, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, Container, IconButton, Switch, Toolbar, Typography } from "@mui/material";
 import App from "../App";
 import { Link } from "react-router-dom";
 import { useContext, 
@@ -7,9 +7,10 @@ import { useContext,
 // import { moviesList } from "../config/moviesList";
 import { MoviesContext } from "../context/MoviesContextProvider";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
+import { Brightness4, Brightness7 } from "@mui/icons-material";
 
 
-function Navbar() {
+function Navbar({isDarkMode, setIsDarkMode}) {
 
   //  use movies context
 
@@ -34,9 +35,10 @@ function Navbar() {
 
     //   console.log(searchMovie);
 
-
-      
     // }
+
+
+    const handleToggle = () => setIsDarkMode(!isDarkMode)
 
     return (
       <>
@@ -61,6 +63,9 @@ function Navbar() {
                 {" "}
                 Edit
               </Button>
+              <IconButton color="inherit" onClick={handleToggle} >
+                {isDarkMode ? <Brightness4 /> : <Brightness7/> }
+              </IconButton>
             </Toolbar>
           </Toolbar>
         </AppBar>

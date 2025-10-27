@@ -25,7 +25,8 @@ function HomePage() {
   // console.log(moviesList,'direct');
 
   // import movies from context
-    const { allMovies, handleAToZ, handleZToA,  } = useContext(MoviesContext);
+    const { allMovies, handleAToZ, handleZToA, openBtn, } =
+      useContext(MoviesContext);
 
     // console.log(allMovies,'context');
     
@@ -72,7 +73,9 @@ function HomePage() {
   //      console.log("Sorted Z-A");
   // }
 
-  
+
+
+
 
   return (
     <>
@@ -81,10 +84,10 @@ function HomePage() {
       <Box
         sx={{ marginTop: "5rem", display: "flex", justifyContent: "center" }}
       >
-        <Button variant="contained" onClick={() => handleAToZ()}>
+        <Button variant={openBtn === 'A-Z' ? 'contained' : 'outlined' } onClick={() => handleAToZ("A-Z")}>
           A-Z
         </Button>
-        <Button variant="contained" sx={{ marginLeft: "1rem" }} onClick={() => handleZToA()} >
+        <Button variant={openBtn === 'Z-A' ? 'contained' : 'outlined' } sx={{ marginLeft: "1rem" }} onClick={() => handleZToA("Z-A")} >
           Z-A
         </Button>
       </Box>
@@ -132,7 +135,7 @@ function HomePage() {
             <span style={{ maxWidth: "19rem" }}>{movie.title}</span>
             <HighlightOffIcon onClick={handleClose} sx={{ color: "red" }} />
           </DialogTitle>
-          <DialogContent style={{ maxWidth: "21rem" }}>
+          <DialogContent style={{ maxWidth: "23rem" }}>
             <img
               src={movie.poster}
               alt={movie.title}

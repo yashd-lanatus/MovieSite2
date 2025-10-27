@@ -1,9 +1,15 @@
-import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
-import { moviesList } from "../config/moviesList";
+// import { moviesList } from "../config/moviesList";
+import { useContext } from "react";
+import { MoviesContext } from "../context/MoviesContextProvider";
 
 function EditPage() {
+
+  const { allMovies, updateMovies } = useContext(MoviesContext);
+
+
+
 
 
   // for column
@@ -13,10 +19,9 @@ function EditPage() {
   //   { field: "id", headerName: "ID", width: 70 },
   //   { field: "firstName", headerName: "First name", width: 130 },
   //   { field: "lastName", headerName: "Last name", width: 130 },
-  //
   // ];
 
-  const firstObj = moviesList[0];
+  const firstObj = allMovies[0];
   // console.log(firstObj);
   const keys = Object.keys(firstObj);
   // console.log(keys);
@@ -24,12 +29,12 @@ function EditPage() {
   const columns = [];
   let value = 0;
   for (let index = 0; index < keys.length; index++) {
-    value = value + 1;
     const objValue = {
       field: keys[value],
       headerName: keys[value],
       editable: true,
     };
+    value = value + 1;
     // console.log(objValue);
     columns.push(objValue);
   }
@@ -43,9 +48,7 @@ function EditPage() {
 
   // console.log(moviesList);
 
-  // for rows
-
-  const rows = moviesList;
+  const rows = allMovies;
 
 
   const paginationModel = { page: 0, pageSize: 5 };
@@ -60,6 +63,10 @@ function EditPage() {
           pageSizeOptions={[5, 10]}
           checkboxSelection
           sx={{ border: 0 }}
+          processRowUpdate =  {(newRow)=>{
+            updateMovies(newRow)
+            return newRow
+          }}
         />
       </Paper>
     </>
