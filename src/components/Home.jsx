@@ -2,92 +2,59 @@ import {
   Box,
   Button,
   Card,
-  CardActionArea,
   CardContent,
   CardMedia,
   Dialog,
-  DialogActions,
   DialogContent,
-  DialogContentText ,
   DialogTitle,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-// import { moviesList } from "../config/moviesList";
 import { useContext, useState } from "react";
 import { MoviesContext } from "../context/MoviesContextProvider";
 
 
-
 function HomePage() {
-  
-  // console.log(moviesList,'direct');
 
-  // import movies from context
-    const { allMovies, handleAToZ, handleZToA, openBtn, } =
-      useContext(MoviesContext);
+    const { allMovies, handleSort, openBtn,  } = useContext(MoviesContext);
 
-    // console.log(allMovies,'context');
-    
+    const [open, setOpen] = useState(false);
+    const [movie, setMovie] = useState([]);
 
+    const handleClickOpen = (movies) => {
+      setOpen(true);
+      setMovie(movies);
+    };
 
-
-
-  const [open, setOpen] = useState(false);
-  const [movie, setMovie] = useState([]);
-
-
-
-  // console.log(open);
-
-  const handleClickOpen = (movies) => {
-    setOpen(true);
-    // console.log(movies);
-    setMovie(movies);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-
-  // sort button logic
-
-  // const [sortAToZ, setSortAToZ] = useState([])
-  // const [sortZToA, setSortZToA] = useState([])
-  
-
-  // const handleAToZ = () => {
-  // moviesList.sort((a,b)=> a.title.localeCompare(b.title))
-  // // console.log(moviesList.sort((a,b)=> a.title.localeCompare(b.title)));
-  // // console.log(moviesList);
-  // setSortAToZ(moviesList);
-  // console.log('Sorted A-Z');
-  // }
-  // // console.log(sortMoviesList);
-
-  // const handleZToA = () => {
-  //    moviesList.sort((a, b) => b.title.localeCompare(a.title));
-  //    setSortZToA(moviesList)
-  //      console.log("Sorted Z-A");
-  // }
-
-
-
-
+    const handleClose = () => {
+      setOpen(false);
+    };
 
   return (
     <>
       {/* sort buttons */}
-
       <Box
         sx={{ marginTop: "5rem", display: "flex", justifyContent: "center" }}
       >
-        <Button variant={openBtn === 'A-Z' ? 'contained' : 'outlined' } onClick={() => handleAToZ("A-Z")}>
+        <Button
+          variant='contained'
+          color="info"
+          onClick={() => handleSort("RESET")}
+        >
+          RESET
+        </Button>
+        <Button
+          variant={openBtn === "A-Z" ? "contained" : "outlined"}
+          sx={{ marginLeft: "1rem" }}
+          onClick={() => handleSort("A-Z")}
+        >
           A-Z
         </Button>
-        <Button variant={openBtn === 'Z-A' ? 'contained' : 'outlined' } sx={{ marginLeft: "1rem" }} onClick={() => handleZToA("Z-A")} >
+        <Button
+          variant={openBtn === "Z-A" ? "contained" : "outlined"}
+          sx={{ marginLeft: "1rem" }}
+          onClick={() => handleSort("Z-A")}
+        >
           Z-A
         </Button>
       </Box>
@@ -125,8 +92,7 @@ function HomePage() {
         );
       })}
 
-      {/* for dialog box */}
-
+      {/* dialog box */}
       {
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle

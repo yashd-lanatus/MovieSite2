@@ -4,93 +4,69 @@ import { moviesList } from "../config/moviesList";
 
 export const MoviesContext = createContext()
 
-
-
 function MoviesContextProvider({children}) {
   const [allMovies, setAllMovies] = useState(moviesList);
-
-  // console.log(searchMovie,'from contextttt');
-
-
+  
   // handle sorting
-
+  
   const [openBtn, setOpenBtn] = useState('');
-
-  const handleAToZ = (btn) => {
-    setOpenBtn(btn)
-    setAllMovies([...allMovies].sort((a, b) => a.title.localeCompare(b.title)));
-    console.log("Sorted A-Z");
-  };
-  const handleZToA = (btn) => {
-    setOpenBtn(btn);
-    setAllMovies([...allMovies].sort((a, b) => b.title.localeCompare(a.title)));
-    console.log("Sorted Z-A");
-  };
-
-  //   const handleAToZ = () => {
-  //     allMovies.sort((a, b) => a.title.localeCompare(b.title));
-  //     // console.log(moviesList.sort((a,b)=> a.title.localeCompare(b.title)));
-  //     // console.log(moviesList);
-  //     //   setAllMovies(allMovies);
-  //     setSortAToZ(allMovies);
-  //     console.log("Sorted A-Z");
-  //     // if (sortAToZ.length > 0){
-  //     //     setAllMovies(sortAToZ)
-  //     // }
-  //   };
-
-  //   const handleZToA = () => {
-  //     allMovies.sort((a, b) => b.title.localeCompare(a.title));
-  //     //   setAllMovies(allMovies);
-  //     setSortZToA(allMovies);
-  //     console.log("Sorted Z-A");
-  //     // if (sortZToA.length > 0){
-  //     //     setAllMovies(sortZToA)
-  //     // }
-  //   };
-
   
-  // handle search form navbar
-
-  const [searchMovie, setSearchMovie] = useState([]);
-  
-  const handleSearch = (e) => {
-    moviesList.map((movie) => {
-      movie?.title.toLowerCase().includes(e)
-        ? searchMovie.push(movie)
-        : setSearchMovie([]);
-    });
-    if (e === "") {
-      setAllMovies(moviesList);
-    } else {
-      setAllMovies(searchMovie);
+  const handleSort = (action) => {
+    switch (action){
+      case 'A-Z':
+        setOpenBtn('A-Z');
+        setAllMovies([...allMovies].sort((a, b) => a.title.localeCompare(b.title)));
+        break;
+      case 'Z-A':
+        setOpenBtn('Z-A');
+        setAllMovies([...allMovies].sort((a, b) => b.title.localeCompare(a.title)));
+        break;
+        case 'RESET':
+        setOpenBtn('RESET');
+        setAllMovies(moviesList)
+        break;
+      }
     }
-    if (searchMovie.length === 0) {
-      console.log("Not found");
+    
+    // handle search
+
+    const [searchMovie, setSearchMovie] = useState([]);
+    const [baseMovie, setBaseMovie] = useState(moviesList)
+
+    const handleSearch = (e) => {
+      if (e === ""){
+        setAllMovies(baseMovie)
+      } else {
+        setAllMovies(
+          baseMovie.filter((movie) => movie.title.toLowerCase().includes(e))
+        );
+      }
     }
-  };
-
-
-  // for edit movies
-
-  const updateMovies = (updatedMovies) => {
-    setAllMovies((prev) =>
-      prev.map((movie) =>
-        movie.id === updatedMovies.id ? { ...movie, ...updatedMovies } : movie
-      )
-    );
-  };
-
-
-  return (
-    <MoviesContext.Provider
+    
+    // handle edit movies
+    
+    const updateMovies = (updatedMovies) => {
+      setBaseMovie((prev) =>
+        prev.map((movie) =>
+          movie.id === updatedMovies.id ? { ...movie, ...updatedMovies } : movie
+        )
+      );
+      setAllMovies((prev) =>
+        prev.map((movie) =>
+          movie.id === updatedMovies.id ? { ...movie, ...updatedMovies } : movie
+        )
+      );
+      return updatedMovies;
+    };
+    
+    return (
+      <MoviesContext.Provider
       value={{
         allMovies,
         searchMovie,
         setSearchMovie,
         handleSearch,
-        handleAToZ,
-        handleZToA,
+        handleSort,
         updateMovies,
         openBtn,
       }}

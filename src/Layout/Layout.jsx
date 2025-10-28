@@ -8,15 +8,11 @@ function Layout() {
 
   const [isDarkMode, setIsDarkMode] = useState(false)
 
-  
-
   const theme = createTheme({
     palette : {
       mode : isDarkMode ? 'dark' : 'light'
     }
   })
-
-
 
     return (
       <>
@@ -25,9 +21,6 @@ function Layout() {
           <Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
           <Outlet />
         </ThemeProvider>
-        
-        {/* <Navbar />
-        <Outlet /> */}
       </>
     );
 }

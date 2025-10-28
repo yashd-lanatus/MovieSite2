@@ -1,6 +1,3 @@
-
-
-
 export const moviesList = [
   {
     id: 1,
@@ -345,4 +342,3 @@ export const moviesList = [
     trailer: "https://www.youtube.com/watch?v=LbfMDwc4azU",
   },
 ];
-
