@@ -38,7 +38,7 @@ function MoviesContextProvider({children}) {
         setAllMovies(baseMovie)
       } else {
         setAllMovies(
-          baseMovie.filter((movie) => movie.title.toLowerCase().includes(e))
+          baseMovie.filter((movie) => movie.title.toLowerCase().includes(e.toLowerCase()))
         );
       }
     }
