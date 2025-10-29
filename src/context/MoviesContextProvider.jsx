@@ -5,7 +5,22 @@ import { moviesList } from "../config/moviesList";
 export const MoviesContext = createContext()
 
 function MoviesContextProvider({children}) {
+
   const [allMovies, setAllMovies] = useState(moviesList);
+
+  // for dialog box
+
+  const [open, setOpen] = useState(false);
+  const [movie, setMovie] = useState([]);
+
+  const handleClickOpen = (movies) => {
+    setOpen(true);
+    setMovie(movies);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   
   // handle sorting
   
@@ -21,16 +36,15 @@ function MoviesContextProvider({children}) {
         setOpenBtn('Z-A');
         setAllMovies([...allMovies].sort((a, b) => b.title.localeCompare(a.title)));
         break;
-        case 'RESET':
-        setOpenBtn('RESET');
-        setAllMovies(moviesList)
-        break;
+      case 'RESET':
+      setOpenBtn('RESET');
+      setAllMovies(moviesList)
+      break;
       }
     }
     
     // handle search
 
-    const [searchMovie, setSearchMovie] = useState([]);
     const [baseMovie, setBaseMovie] = useState(moviesList)
 
     const handleSearch = (e) => {
@@ -61,19 +75,23 @@ function MoviesContextProvider({children}) {
     
     return (
       <MoviesContext.Provider
-      value={{
-        allMovies,
-        searchMovie,
-        setSearchMovie,
-        handleSearch,
-        handleSort,
-        updateMovies,
-        openBtn,
-      }}
-    >
-      {children}
-    </MoviesContext.Provider>
-  );
+        value={{
+          allMovies,
+          handleSearch,
+          handleSort,
+          updateMovies,
+          openBtn,
+          open,
+          setOpen,
+          movie,
+          setMovie,
+          handleClickOpen,
+          handleClose,
+        }}
+      >
+        {children}
+      </MoviesContext.Provider>
+    );
 }
 
 export default MoviesContextProvider;
